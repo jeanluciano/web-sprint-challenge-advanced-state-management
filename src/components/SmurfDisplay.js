@@ -1,12 +1,28 @@
-import React from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import Smurf from "./Smurf";
+import { getSmurfs } from "../actions";
+export const SmurfDisplay = () => {
+  const dispatch = useDispatch();
 
-export class SmurfDisplay extends React.Component {
-    render() {
-        return(<div>
-            
-        </div>)
-    }
-}
+  useEffect(() => {
+    dispatch(getSmurfs());
+  }, []);
+
+  const smurfs = useSelector((state) => state.smurfs);
+  const isLoading = useSelector((state) => state.isFetching);
+
+  return (
+    <div>
+      {isLoading ? (
+        <h1>Loading Smurfs</h1>
+      ) : (
+        smurfs.map((smurf) => <Smurf smurf={smurf} key={smurf.id} />)
+      )}
+      <div></div>
+    </div>
+  );
+};
 
 export default SmurfDisplay;
 

@@ -1,21 +1,60 @@
-import React from 'react';
+import React,{useState} from 'react';
+import {addSmurf} from '../actions/index';
+import {useDispatch} from 'react-redux'
+const initialState = {
+        name:'',
+        position:'',
+        nickname:'',
+        description:''
+    }
+const AddForm = ()=> {
+    const [formValues, setFormValues] = useState(initialState)
+    const dispatch = useDispatch()
+    
+   const handleChange = (e) => {
+        const value = e.target.value;
+        setFormValues({
+            ...formValues,
+            [e.target.name]:value,
+        })
+    }
 
-class AddForm extends React.Component {
-
-    render() {
+   const handleSubmit = (e) => {
+       const newSmurf = {...formValues}
+       console.log(newSmurf)
+        
+        e.preventDefault();
+        setFormValues(initialState)
+        dispatch(
+            addSmurf(newSmurf)
+        )
+    }
+   
         return(<section>
             <h2>Add Smurf</h2>
-            <form>
+            <form onSubmit={(e)=> handleSubmit(e)}>
                 <div className="form-group">
                     <label htmlFor="name">Name:</label><br/>
-                    <input onChange={this.handleChange} name="name" id="name" />
+                    <input onChange={handleChange} name="name" id="name" />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="position">Position:</label><br/>
+                    <input onChange={handleChange} name="position" id="position" />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="nickname">Nickname:</label><br/>
+                    <input onChange={handleChange} name="nickname" id="nickname" />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="description">Description:</label><br/>
+                    <input onChange={handleChange} name="description" id="description" />
                 </div>
 
                 <div data-testid="errorAlert" className="alert alert-danger" role="alert">Error: </div>
-                <button>Submit Smurf</button>
+                <button  type='submit'>Submit Smurf</button>
             </form>
         </section>);
-    }
+    
 }
 
 export default AddForm;
